@@ -28,36 +28,7 @@ CRM Github/
 │   ├── 01_demo_seed.py
 │   └── 02_overdue_tasks.py
 ├── tests/
-├── requirements.txt
 └── README.md
-```
-
-## Prerequisites
-
-The CRM requires:
-
-- Python 3.11 or newer
-- `venv` support
-- `pip`
-
-### Install Python
-
-macOS with Homebrew:
-
-```bash
-brew install python
-```
-
-Ubuntu / Debian:
-
-```bash
-sudo apt update && sudo apt install -y python3 python3-venv python3-pip
-```
-
-Windows PowerShell with `winget`:
-
-```powershell
-winget install -e --id Python.Python.3.12
 ```
 
 ## Installation
@@ -76,10 +47,10 @@ python -m venv .venv
 .venv\Scripts\Activate.ps1
 ```
 
-### 2. Install dependencies
+### 2. Install Flask
 
 ```bash
-pip install -r requirements.txt
+pip install Flask
 ```
 
 ### 3. Run the local server
