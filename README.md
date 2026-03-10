@@ -1,6 +1,6 @@
 # CRM GitHub
 
-Local web CRM, cross-platform, and ready to upload to GitHub. It runs on Python + Flask + SQLite, so it behaves the same on macOS, Windows, and Linux as long as Python 3 is installed.
+Local web CRM, cross-platform, and ready to upload to GitHub. It runs on Python + SQLite, so it behaves the same on macOS, Windows, and Linux as long as Python 3 is installed.
 
 ## Included features
 
@@ -47,11 +47,6 @@ python -m venv .venv
 .venv\Scripts\Activate.ps1
 ```
 
-### 2. Install Flask
-
-```bash
-pip install Flask
-```
 
 ### 3. Run the local server
 
