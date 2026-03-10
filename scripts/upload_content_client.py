@@ -4,14 +4,18 @@ import argparse
 import base64
 import json
 from pathlib import Path
-from urllib import request
+from urllib import error, request
 
 
 DEFAULT_API_URL = "https://content-receiver.replit.app/api/upload-content"
-DEFAULT_SOURCE_DIR = Path("~/Desktop").expanduser()
+DEFAULT_SOURCE_DIR = Path.home() / "Desktop"
 
 
-def upload_file(url: str, source_file: Path, filename: str) -> None:
+def is_hidden(relative_path: Path) -> bool:
+    return any(part.startswith(".") for part in relative_path.parts)
+
+
+def upload_file(url: str, source_file: Path, filename: str) -> str:
     payload = {
         "filename": filename,
         "content_base64": base64.b64encode(source_file.read_bytes()).decode("ascii"),
@@ -26,7 +30,7 @@ def upload_file(url: str, source_file: Path, filename: str) -> None:
     )
 
     with request.urlopen(req) as response:
-        print(f"{filename}: {response.read().decode('utf-8')}")
+        return response.read().decode("utf-8")
 
 
 def main() -> None:
@@ -55,12 +59,38 @@ def main() -> None:
     if not source_files:
         raise SystemExit(f"No files found in folder: {source_dir}")
 
+    uploaded_count = 0
+    skipped_count = 0
+    failed_count = 0
+
     for source_file in source_files:
-        upload_file(
-            args.url,
-            source_file,
-            source_file.relative_to(source_dir).as_posix(),
-        )
+        relative_path = source_file.relative_to(source_dir)
+        filename = relative_path.as_posix()
+
+        if is_hidden(relative_path):
+            skipped_count += 1
+            print(f"Skipping hidden file: {filename}")
+            continue
+
+        try:
+            response_body = upload_file(args.url, source_file, filename)
+            uploaded_count += 1
+            print(f"{filename}: {response_body}")
+        except error.HTTPError as exc:
+            failed_count += 1
+            error_body = exc.read().decode("utf-8", errors="replace")
+            print(f"{filename}: HTTP {exc.code} {exc.reason}")
+            if error_body:
+                print(error_body)
+        except (error.URLError, OSError) as exc:
+            failed_count += 1
+            print(f"{filename}: {exc}")
+
+    print(
+        f"Completed. Uploaded: {uploaded_count}, skipped: {skipped_count}, failed: {failed_count}"
+    )
+    if failed_count:
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":
