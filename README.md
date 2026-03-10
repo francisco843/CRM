@@ -60,34 +60,6 @@ Windows PowerShell with `winget`:
 winget install -e --id Python.Python.3.12
 ```
 
-## Quick setup
-
-macOS / Linux, one command:
-
-```bash
-python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
-```
-
-Windows PowerShell, one command:
-
-```powershell
-python -m venv .venv; .\.venv\Scripts\Activate.ps1; pip install -r requirements.txt
-```
-
-## One-command start
-
-macOS / Linux:
-
-```bash
-./start.sh
-```
-
-macOS double click from Finder:
-
-```bash
-./start.command
-```
-
 ## Installation
 
 ### 1. Create a virtual environment
@@ -125,24 +97,6 @@ http://127.0.0.1:5000
 ## Scripts / Addons
 
 Every time you run the web server, the CRM scans the `scripts/` folder and executes all `.py` files in alphabetical order.
-
-## Important note about requirements
-
-The CRM itself only needs:
-
-- Python 3.11+
-- `venv`
-- `pip`
-- The packages listed in `requirements.txt`
-
-Custom scripts inside `scripts/` are different:
-
-- Any `.py` file in `scripts/` runs automatically when the webservice starts.
-- A custom script may require extra Python packages, environment variables, input files, network access, or external APIs.
-- Those extra requirements belong to that script, not to the CRM core.
-
-If one of your scripts needs more packages, add them to `requirements.txt` so `start.sh` installs them automatically.
-If one of your scripts needs files or environment variables, document them next to that script.
 
 ### Addon contract
 
